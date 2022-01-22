@@ -10,6 +10,7 @@ class Topic(models.Model):
     def __str__(self):
         return self.name
 
+
 class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
@@ -35,5 +36,9 @@ class Message(models.Model):
     body = models.TextField()
     updated = models.DateTimeField(auto_now=True) #every single time save 
     created = models.DateTimeField(auto_now_add=True) #first save or crate 
+    
+    class Meta:
+        ordering = ['-updated', '-created']
+
     def __str__(self):
-        return self.body
+        return self.body[0:50]  #shwo only first 50 char of msg
