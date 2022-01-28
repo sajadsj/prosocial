@@ -57,7 +57,16 @@ def registerUser(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, "Registeration failed")
+            messages.error(request, "Registeration failed!")
+            #messages.error(request,str(form.error_messages))
+
+# Your password can’t be too similar to your other personal information.
+
+# Your password must contain at least 8 characters.
+
+# Your password can’t be a commonly used password.
+
+# Your password can’t be entirely numeric.
     
     return render(request, 'base/login_register.html',{'form':form})
 
@@ -69,7 +78,7 @@ def home (request):
         Q(name__icontains=q) |
         Q(description__icontains=q)
         )
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:5]
     room_count = rooms.count()
     room_messages = Message.objects.filter(Q(room__topic__name__icontains = q))
 
@@ -187,7 +196,15 @@ def updateUser(request):
         if form.is_valid():
             form.save()
             return redirect('user-profile', pk = user.id)
-
-
-
     return render(request, 'base/update-user.html',{'form': form})
+
+
+def topicPage(request):
+    q = request.GET.get('q') if request.GET.get('q')!= None else ''
+    topics = Topic.objects.filter(name__icontains=q)
+    return render(request, 'base/topics.html', {'topics':topics})
+
+
+def activityPage(request):
+    room_messages=Message.objects.all()
+    return render (request, 'base/activity.html', {'room_messages':room_messages})
