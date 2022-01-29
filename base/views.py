@@ -45,7 +45,6 @@ def logoutUser(request):
 
 def registerUser(request):
     form=MyUserCreationFrom()
-    
     if request.method == 'POST':
         form = MyUserCreationFrom(request.POST)
         if form.is_valid():
