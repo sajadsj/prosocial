@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Room,Topic, Message, User
 from .forms import Roomform, userForm, MyUserCreationFrom
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
@@ -180,7 +181,8 @@ def deleteMessage(request,pk):
 
     if request.method == 'POST':
         message.delete()
-        return redirect('home')
+        pk = message.room.id
+        return redirect('room',pk)
     return render(request, 'base/delete.html', {'obj':message})
 
 
